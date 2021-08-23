@@ -1,5 +1,17 @@
 .img-container{
     display: block;
-    margin-left: 300px;
+    margin-left: 380px;
     width: 204px;
+}
+
+
+.accept-deny-list-item{
+    margin: auto;
+    padding: 10px;
+    word-spacing: 1px;
+}
+
+.accept-deny-list:hover{
+    background: black;
+    color: white;
 }

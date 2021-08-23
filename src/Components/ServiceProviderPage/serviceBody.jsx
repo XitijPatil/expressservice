@@ -4,6 +4,7 @@ import { Switch, Link, Route} from 'react-router-dom'
 import  UpdateDetails  from './updateDetails';
 import { TrendingItems } from './trendingItems';
 import { Stats } from './stats';
+import NewRequests from './NewRequests';
 
 
 export class ServiceBody extends React.Component {
@@ -31,6 +32,7 @@ export class ServiceBody extends React.Component {
                             <h2><strong>Overview</strong></h2>
                             <div className='overEle'><Link to='/serviceprovider' id='active'>Customer</Link></div>
                             <div className='overEle'><Link to='/serviceprovider/updateDetails'>Update Details</Link></div>
+                            <div className='overEle'><Link to='/serviceprovider/newrequests'>New Requests</Link></div>
                             <div className='overEle'><Link to='/serviceprovider/trendingItems'>Trending Items</Link></div>
                             <div className='overEle'><Link to='/serviceprovider/stats'>Stats</Link></div>
                         </div>
@@ -43,9 +45,12 @@ export class ServiceBody extends React.Component {
                                     <CustomerList accessToken={this.state.accessToken}/>
                                 </Route>
                                 <Route path='/serviceprovider/updateDetails'>
-                                    <UpdateDetails accessToken={this.state.accessToken}/>
+                                    <UpdateDetails accessToken={this.state.accessToken} changeProfileImage={this.props.changeProfileImage} changeServiceTitle={this.props.changeServiceTitle} changeSlogan={this.props.changeSlogan}/>
                                 </Route>
                                 <Route path='/serviceprovider/trendingItems' component={TrendingItems}></Route>
+                                <Route path='/serviceprovider/newrequests'>
+                                    <NewRequests accessToken={this.state.accessToken}/>
+                                </Route>
                                 <Route path='/serviceprovider/stats' component={Stats}></Route>
 
                             </Switch>

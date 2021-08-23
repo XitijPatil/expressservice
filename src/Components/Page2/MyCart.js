@@ -1,9 +1,9 @@
 import React from 'react'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { useCart } from "react-use-cart"
-
-const MyCart = () => {
-
+import {Link, withRouter} from "react-router-dom"
+const MyCart = (props) => {
+   console.log(props.providers)
     const {
         isEmpty,
         totalUniqueItems,
@@ -15,9 +15,9 @@ const MyCart = () => {
         emptyCart
 
     } = useCart();
+ 
 
     if (isEmpty) return <h1 className="text-center">Your Cart is Empty</h1>
-
     return (
         <section className="py-4 container">
 
@@ -57,7 +57,7 @@ const MyCart = () => {
                     </table>
                 </div>
                 <div className="col-auto ms-auto my-2">
-                    <h2>Total Price: ₹{cartTotal}</h2>
+                    <h2>Total Price: {cartTotal}INR</h2>
                 </div>
                 <div className="col-auto">
                     <button
@@ -65,7 +65,9 @@ const MyCart = () => {
                         onClick={()=>emptyCart()}
                     >Clear Cart</button>
 
-                    <button className="btn btn-primary m-2">Book Now</button>
+                    <Link to={{pathname:"/confirmbooking", state:{providers:props.providers, price:cartTotal, item:items}
+                    }}>
+      <button className="btn btn-primary m-2" >Book Now</button></Link>
                 </div>
             </div>
         </section>
@@ -75,4 +77,4 @@ const MyCart = () => {
     )
 }
 
-export default MyCart
+export default MyCart;

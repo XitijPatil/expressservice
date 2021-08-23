@@ -28,14 +28,14 @@ export class Spregister extends React.Component {
   async postData(){
 
     console.log("PostData called");
-    const {username, password, email, servname} = this.state.fields;
+    const {username, password, email, servname,city} = this.state.fields;
     const res = await fetch("http://localhost:4000/splogin/registerSP",{
       method : "POST",
       headers : {
         "Content-Type" : "application/json"
       },
       body : JSON.stringify({
-        username,password,email,servname,
+        username,password,email,servname,city,
         pno: this.props.pno
       })
     });

@@ -11,6 +11,8 @@ import painter from './painting-contractors.jpg';
 import carpenter from './images.jpg';
 import electrician from './istockphoto-511990814-612x612.jpg';
 import Footer from '../Page2/Footer';
+import {withRouter} from "react-router-dom";
+import HeroSection from '../Page2/HeroSection';
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -27,6 +29,7 @@ export class HomeHeader extends React.Component {
   constructor(props) {
 
     super(props);
+    
   }
 
   render(){
@@ -61,7 +64,9 @@ class Home extends React.Component{
     super(props);
     this.state = {
       accessToken : this.props.location.state && this.props.location.state.accessToken,
-      payload : this.props.location.state && parseJwt(this.props.location.state.accessToken)
+      payload : this.props.location.state && parseJwt(this.props.location.state.accessToken),
+      city:'',
+      servicename:''
     }
   }
 
@@ -70,6 +75,44 @@ class Home extends React.Component{
     this.setState({accessToken:null,payload:null});
   }
 
+  async postData(accessToken){
+    console.log("PostData called");
+    const res = await fetch("http://localhost:4000/getserviceproviders",{
+      method : "POST",
+      headers : {
+        "Authorization":"Bearer "+accessToken,
+        "Content-Type" : "application/json"
+      },
+      body : JSON.stringify({
+        city:this.state.city,
+        service:this.state.servicename
+      })
+    })
+    .then(response=>response.json())
+    .then(data=>{
+      console.log("data.providers = ",data.providers)
+      let itemList=data.providers;
+      const list=itemList.map(item=>{
+        return item.name;
+      })
+      console.log(list)
+      this.props.getProviderDetails(data.providers);
+      this.props.setAccessToken(accessToken);
+      this.props.history.push("./service")
+    });
+  }
+
+   async getServices(e){
+     let servchange=e.target.innerText;
+     await this.setState({servicename:servchange})
+     console.log(this.state.servicename)
+     this.postData(this.state.accessToken);
+   }
+   async handleChange(e){
+    let change=e.target.value
+    await this.setState({city:change})
+    console.log(this.state.city)
+  }
   render(){
 
     //console.log("In home accessToken = ",this.state.payload.name);
@@ -77,69 +120,77 @@ class Home extends React.Component{
       marginTop:"0px",
     };
     return (
-      <div className='hmbody'>
+      <>
         
         <HomeHeader payload={this.state.payload} logoutUser={this.logoutUser.bind(this)}/>
+        <HeroSection/>
         
         <div className="search1">
-          <input className="search2" type="text" placeholder="search service"/>
-          <button className="btn1">Search</button>
+        <p className="label1">Where do you need a service?</p>
+        <select className="city" name="city" onChange={this.handleChange.bind(this)} >
+        <option selected value="select">Select City</option>
+
+                <option value="Pune">Pune</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Delhi">Delhi</option>
+              </select>
         </div>
           
         <div className="cards1">
           <div className="card_s">
             <img className="img_1" src={grooming} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Grooming</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Grooming</b></h4> 
             </div>
           </div>
           
           <div className="card_s">
             <img className="img_1" src={appliance} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Repair</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Repair</b></h4> 
             </div>
           </div>
           
-          <Link to="/service"><div className="card_s">
+          <div className="card_s">
             <img className="img_1" src={plumber} alt="Avatar"/>
              <div className="containers_text">
-            <h4 className="texts"><b>Plumber</b></h4>
+            <h4 className="texts" onClick={this.getServices.bind(this)}><b>Plumber</b></h4>
             </div> 
-          </div></Link>
+          </div>
           
           <div className="card_s">
             <img className="img_1" src={painter} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Painters</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Painters</b></h4> 
             </div>
           </div>
           
           <div className="card_s">
             <img className="img_1" src={pest} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Pest Control</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Pest Control</b></h4> 
             </div>
           </div>
           
           <div className="card_s">
             <img className="img_1" src={cleaning} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Cleaning</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Cleaning</b></h4> 
             </div>
           </div>
           
           <div className="card_s">
             <img className="img_1" src={carpenter} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Carpenter</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Carpenter</b></h4> 
             </div>
           </div>
           
           <div className="card_s">
             <img className="img_1" src={electrician} alt="Avatar"/>
             <div className="containers_text">
-              <h4><b>Electrician</b></h4> 
+              <h4 className="texts" onClick={this.getServices.bind(this)}><b>Electrician</b></h4> 
             </div>
           </div>
         </div>
@@ -147,8 +198,8 @@ class Home extends React.Component{
         <Footer/>
         </div>
         <a href="/adminlogin">Admin Login</a>
-      </div>
+      </>
     );
   }
 }
-export default Home;
+export default withRouter(Home);

@@ -33,7 +33,7 @@ export class Adminlogin extends React.Component {
     console.log("PostData called");
     const {username, password} = this.state.fields;
 
-    const res = await fetch("http://localhost:4000/login/adminlogin",{
+    const res = await fetch("http://localhost:4000/adminlogin/loginadmin",{
       method : "POST",
       headers : {
         "Content-Type" : "application/json"
@@ -55,12 +55,14 @@ export class Adminlogin extends React.Component {
       console.log("Login unsuccessfull")
     }*/
 
-    if(data) {
+    if(data.accessToken) {
 
       alert("Login successfull");
       console.log("Login Data : ",data," And accessToken : ",data.accessToken);
       this.setState({accessToken : data.accessToken});
       this.setState({route : "/admin"});
+    }else {
+      alert('Please enter valid credentials')
     }
   }
   
